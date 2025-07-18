@@ -1,4 +1,6 @@
-This is a straightforward Mini Library Management System, which is implemented in C++ with file management functionality. Users can:
+This is a Library Management System, which is implemented in C++ with file management functionality. 
+
+Users can:
 
 Create new books which consist of a name, author, and number of copies of the book.
 View all available books in the library.
