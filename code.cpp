@@ -1,7 +1,25 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <limits>
 using namespace std;
+
+// Function to check if book already exists
+bool bookExists(string bookName) {
+    ifstream file("library.txt");
+    string line;
+    
+    while (getline(file, line)) {
+        size_t pos = line.find(" | ");
+        string existingBook = line.substr(0, pos);
+        if (existingBook == bookName) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
 
 void addBook() {
     ofstream file("library.txt", ios::app);
@@ -10,10 +28,28 @@ void addBook() {
 
     cout << "Enter Book Name: ";
     getline(cin >> ws, bookName);
+    
+    // Check if book already exists
+    if (bookExists(bookName)) {
+        cout << "Error: Book with name '" << bookName << "' already exists!\n";
+        file.close();
+        return;
+    }
+
     cout << "Enter Author Name: ";
     getline(cin, authorName);
     cout << "Enter Number of Copies: ";
-    cin >> copies;
+    
+    // Arithmetic validation for copies
+    while (true) {
+        if (cin >> copies && copies > 0) {
+            break; // Valid input, exit loop
+        } else {
+            cout << "Invalid input. Please enter a positive number of copies: ";
+            cin.clear(); // Clear error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        }
+    }
 
     file << bookName << " | " << authorName << " | " << copies << endl;
     file.close();
